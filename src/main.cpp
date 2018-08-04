@@ -5,6 +5,7 @@
 
 #include "Renderer.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 
 #include <iostream>
 #include <math.h>
@@ -30,7 +31,7 @@ int main(void)
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "OpenGL Tutorial", NULL, NULL);
+    window = glfwCreateWindow(800, 777, "OpenGL Tutorial", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -46,16 +47,18 @@ int main(void)
         std::cout << "Error" << std::endl;
     
     float vertices[] = {
-        -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,     // generic vertex attribute (x, y, r, b, g)
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,     // another generic vertex attribute
-         0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-        -0.5f,  0.5f, 1.0f, 1.0f, 0.0f
+        -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,    // generic vertex attribute (x, y, r, b, g)
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,     // another generic vertex attribute
+         0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f
     };
     
     GLuint elements[] = {
         0, 1, 2,
         2, 3, 0
     };
+    
+    
     
     GLuint vao;
     GLCall (glGenVertexArrays (1, &vao));
@@ -74,12 +77,20 @@ int main(void)
     Shader shader ("basic.shader");
     shader.bind();
     
+    Texture texture("textures/m78.jpg");
+    texture.bind();
+    shader.setUnifrom1i ("u_Texture", 0);
+    
     GLCall (glEnableVertexAttribArray (0)); // attrib location position as arguemtn
-    GLCall (glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0));
+    GLCall (glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 7, 0));
 
     GLCall (glEnableVertexAttribArray (1)); // attrib location color as argument
     GLCall (glVertexAttribPointer (1, 3, GL_FLOAT, GL_FALSE,
-                                   sizeof(float) * 5, (void*)(sizeof(float) * 2)));
+                                   sizeof(float) * 7, (void*)(sizeof(float) * 2)));
+    
+    GLCall (glEnableVertexAttribArray (2));
+    GLCall (glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE,
+                                   sizeof(float) * 7, (void*)(sizeof(float) * 5)));
     
     
     /* Loop until the user closes the window */
