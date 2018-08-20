@@ -7,6 +7,11 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 
+#include "../src/vendor/glm/glm.hpp"
+#include "../src/vendor/glm/gtc/matrix_transform.hpp"
+#include "../src/vendor/glm/gtc/type_ptr.hpp"
+
+
 #include <iostream>
 #include <math.h>
 #include <sstream>
@@ -47,10 +52,10 @@ int main(void)
         std::cout << "Error" << std::endl;
     
     float vertices[] = {
-        -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,    // generic vertex attribute (x, y, r, b, g)
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,     // another generic vertex attribute
-         0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f
+        -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,    // generic vertex attribute (x, y, r, b, g)
+         0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,     // another generic vertex attribute
+         0.5f,  0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
     };
     
     GLuint elements[] = {
