@@ -106,6 +106,25 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         
+//        glm::mat4 trans = glm::mat4 (1.0f);
+//        trans = glm::translate(trans, glm::vec3 (0.5f, -0.5f, 0.0f));
+//        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3 (0.0, 0.0, 1.0));
+//
+//        shader.setUniformMatrix4fv ("transform", 1, GL_FALSE, glm::value_ptr (trans));
+        glm::mat4 model = glm::mat4 (1.0f);
+        model = glm::rotate (model, glm::radians (-55.0f), glm::vec3 (1.0f, 0.0f, 0.0f));
+        
+        glm::mat4 view = glm::mat4 (1.0f);
+        view = glm::translate (view, glm::vec3 (0.0f, 0.0f, -3.0f));
+        
+        glm::mat4 projection = glm::mat4 (1.0f);
+        projection = glm::perspective<float>(glm::radians(45.0f), 800 / 777, 0.1f, 100.0f);
+        
+        shader.setUniformMatrix4fv ("model", 1, GL_FALSE, glm::value_ptr (model));
+        shader.setUniformMatrix4fv ("view", 1, GL_FALSE, glm::value_ptr (view));
+        shader.setUniformMatrix4fv ("projection", 1, GL_FALSE, glm::value_ptr (projection));
+        
+        
         GLCall (glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
         
         /* Swap front and back buffers */

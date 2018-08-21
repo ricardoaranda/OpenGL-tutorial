@@ -47,6 +47,11 @@ void Shader::setUnifrom4f (const std::string& name, float v0, float v1, float v2
     GLCall (glUniform4f (getUniformLocation (name), v0, v1, v2, v3));
 }
 
+void Shader::setUniformMatrix4fv (const std::string &name, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
+    GLCall (glUniformMatrix4fv (getUniformLocation (name), count, transpose, value));
+}
+
 GLint Shader::getUniformLocation (const std::string& name)
 {
     GLCall (GLint location = glGetUniformLocation (m_rendereID, name.c_str()));

@@ -31,6 +31,8 @@ public:
     
     void setUnifrom1i (const std::string& name, int value);
     void setUnifrom4f (const std::string& name, float v0, float v1, float v2, float v3);
+    void setUniformMatrix4fv (const std::string& name, GLsizei count, GLboolean transpose, const GLfloat *value);
+
     GLint getUniformLocation (const std::string& name);
     
     ShaderProgramSource parseShader (const std::string& filePath);
