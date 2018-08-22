@@ -16,6 +16,8 @@
 #include <math.h>
 #include <sstream>
 #include <fstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>
 
 // *******************************************************************
 void processInput (GLFWwindow *window);
@@ -23,6 +25,8 @@ void processInput (GLFWwindow *window);
 // *******************************************************************
 int main(void)
 {
+    srand (time(NULL));
+    
     GLFWwindow* window;
     
     /* Initialize the library */
@@ -52,18 +56,61 @@ int main(void)
         std::cout << "Error" << std::endl;
     
     float vertices[] = {
-        -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,    // generic vertex attribute (x, y, r, b, g)
-         0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,     // another generic vertex attribute
-         0.5f,  0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
-        -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
     
-    GLuint elements[] = {
-        0, 1, 2,
-        2, 3, 0
+    glm::vec3 cubePositions[] = {
+        glm::vec3 ( 0.0f,  0.0f,  0.0f),
+        glm::vec3 ( 2.0f,  5.0f, -15.0f),
+        glm::vec3 (-1.5f, -2.2f, -2.5f),
+        glm::vec3 (-3.8f, -2.0f, -12.3f),
+        glm::vec3 ( 2.4f, -0.4f, -3.5f),
+        glm::vec3 (-1.7f,  3.0f, -7.5f),
+        glm::vec3 ( 1.3f, -2.0f, -2.5f),
+        glm::vec3 ( 1.5f,  2.0f, -2.5f),
+        glm::vec3 ( 1.5f,  0.2f, -1.5f),
+        glm::vec3 (-1.3f,  1.0f, -1.5f)
     };
-    
-    
     
     GLuint vao;
     GLCall (glGenVertexArrays (1, &vao));
@@ -74,28 +121,21 @@ int main(void)
     GLCall (glBindBuffer (GL_ARRAY_BUFFER, vbo));
     GLCall (glBufferData (GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
     
-    GLuint ebo;
-    GLCall (glGenBuffers (1, &ebo));
-    GLCall (glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, ebo));
-    GLCall (glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW));
-    
     Shader shader ("basic.shader");
     shader.bind();
     
     Texture texture("textures/m78.jpg");
     texture.bind();
     shader.setUnifrom1i ("u_Texture", 0);
-    
-    GLCall (glEnableVertexAttribArray (0)); // attrib location position as arguemtn
-    GLCall (glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 7, 0));
 
-    GLCall (glEnableVertexAttribArray (1)); // attrib location color as argument
-    GLCall (glVertexAttribPointer (1, 3, GL_FLOAT, GL_FALSE,
-                                   sizeof(float) * 7, (void*)(sizeof(float) * 2)));
     
-    GLCall (glEnableVertexAttribArray (2));
-    GLCall (glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE,
-                                   sizeof(float) * 7, (void*)(sizeof(float) * 5)));
+    GLCall (glEnableVertexAttribArray (0));
+    GLCall (glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0));
+    
+    GLCall (glEnableVertexAttribArray (1));
+    GLCall (glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(sizeof(float) * 3)));
+    
+    GLCall (glEnable (GL_DEPTH_TEST));
     
     
     /* Loop until the user closes the window */
@@ -104,15 +144,12 @@ int main(void)
         processInput (window);
         
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-//        glm::mat4 trans = glm::mat4 (1.0f);
-//        trans = glm::translate(trans, glm::vec3 (0.5f, -0.5f, 0.0f));
-//        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3 (0.0, 0.0, 1.0));
-//
-//        shader.setUniformMatrix4fv ("transform", 1, GL_FALSE, glm::value_ptr (trans));
-        glm::mat4 model = glm::mat4 (1.0f);
-        model = glm::rotate (model, glm::radians (-55.0f), glm::vec3 (1.0f, 0.0f, 0.0f));
+        glm::vec3 cameraPos = glm::vec3 (0.0f, 0.0f, 0.3f);
+        
+        glm::vec3 cameraTarget = glm::vec3 (0.0f, 0.0f, 0.0f);
+        glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
         
         glm::mat4 view = glm::mat4 (1.0f);
         view = glm::translate (view, glm::vec3 (0.0f, 0.0f, -3.0f));
@@ -120,12 +157,24 @@ int main(void)
         glm::mat4 projection = glm::mat4 (1.0f);
         projection = glm::perspective<float>(glm::radians(45.0f), 800 / 777, 0.1f, 100.0f);
         
-        shader.setUniformMatrix4fv ("model", 1, GL_FALSE, glm::value_ptr (model));
         shader.setUniformMatrix4fv ("view", 1, GL_FALSE, glm::value_ptr (view));
         shader.setUniformMatrix4fv ("projection", 1, GL_FALSE, glm::value_ptr (projection));
         
-        
-        GLCall (glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            glm::mat4 model = glm::mat4 (1.0f);
+            model = glm::translate (model, cubePositions[i]);
+            
+            float angle = 20.0f * i;
+            if (i % 3 == 0)
+                model = glm::rotate (model, (float)glfwGetTime(), glm::vec3 (0.664446f, 0.34273f, 0.261933f));
+            else
+                model = glm::rotate (model, glm::radians(angle), glm::vec3 (1.0f, 0.3f, 0.5f));
+            
+            shader.setUniformMatrix4fv ("model", 1, GL_FALSE, glm::value_ptr (model));
+            
+            GLCall (glDrawArrays (GL_TRIANGLES, 0, 36));
+        }
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
